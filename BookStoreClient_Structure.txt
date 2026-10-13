@@ -1,0 +1,69 @@
+bookstore-client/
+├── public/                   # Tài nguyên tĩnh không qua đóng gói (favicon, icon logo)
+│   └── vite.svg
+│
+├── src/
+│   ├── api/                  # Tầng kết nối Backend ASP.NET Core API
+│   │   ├── axiosClient.js    # Cấu hình baseURL, timeout, Interceptor tự gắn Bearer token
+│   │   ├── authApi.js        # login(), register(), getProfile(), changePassword()
+│   │   ├── bookApi.js        # getBooks(), getBookById(), createBook(), updateBook()
+│   │   ├── categoryApi.js    # getCategories()
+│   │   └── orderApi.js       # createOrder(), getMyOrders(), getAllOrders()
+│   │
+│   ├── assets/               # Ảnh tĩnh, icon nội bộ, banner được Vite xử lý nén
+│   │   └── banners/
+│   │
+│   ├── components/           # Các khối UI tái sử dụng nhiều nơi
+│   │   ├── common/           # Thành phần dùng chung toàn web
+│   │   │   ├── Button.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   ├── LoadingSpinner.jsx
+│   │   │   └── Pagination.jsx
+│   │   ├── layout/           # Bố cục trang
+│   │   │   ├── Navbar.jsx    # Header chứa thanh tìm kiếm, giỏ hàng, menu user
+│   │   │   ├── Footer.jsx
+│   │   │   ├── MainLayout.jsx   # Khung giao diện cho khách hàng (Navbar + Outlet + Footer)
+│   │   │   ├── AdminLayout.jsx  # Khung giao diện Admin (Sidebar + Header + Outlet)
+│   │   │   └── AdminSidebar.jsx
+│   │   └── books/            # UI riêng của sản phẩm sách
+│   │       ├── BookCard.jsx  # Thẻ hiển thị từng cuốn sách (ảnh, tên, giá, nút mua)
+│   │       ├── BookGrid.jsx  # Lưới danh sách các BookCard
+│   │       └── BookFilter.jsx# Bộ lọc danh mục, khoảng giá bên thanh bên
+│   │
+│   ├── context/              # Quản lý State toàn cục (Global State)
+│   │   ├── AuthContext.jsx   # Quản lý user đăng nhập, role (Admin/Customer), token, logout
+│   │   └── CartContext.jsx   # Quản lý thêm/bớt/xóa giỏ hàng, đồng bộ vào LocalStorage
+│   │
+│   ├── pages/                # Các trang màn hình thực tế (tương ứng với URL)
+│   │   ├── customer/         # Màn hình cho khách xem & mua hàng
+│   │   │   ├── HomePage.jsx          # Trang chủ (Banner, sách bán chạy)
+│   │   │   ├── BookListPage.jsx      # Danh sách toàn bộ sách kèm lọc & phân trang
+│   │   │   ├── BookDetailPage.jsx    # Chi tiết 1 cuốn sách, chọn số lượng, bấm mua
+│   │   │   ├── CartPage.jsx          # Xem giỏ hàng, cập nhật số lượng
+│   │   │   ├── CheckoutPage.jsx      # Nhập địa chỉ nhận hàng, xác nhận đặt
+│   │   │   ├── LoginPage.jsx         # Form đăng nhập
+│   │   │   ├── RegisterPage.jsx      # Form đăng ký tài khoản
+│   │   │   └── ProfilePage.jsx       # Xem/sửa hồ sơ cá nhân, đổi mật khẩu
+│   │   │
+│   │   └── admin/            # Màn hình trang quản trị
+│   │       ├── DashboardPage.jsx     # Thống kê doanh thu, số đơn, tồn kho
+│   │       ├── BookManagePage.jsx    # Bảng danh sách sách (thêm/sửa/xóa, upload ảnh)
+│   │       └── OrderManagePage.jsx   # Xem và duyệt trạng thái các đơn hàng
+│   │
+│   ├── routes/               # Cấu hình điều hướng trang (React Router DOM)
+│   │   ├── AppRoutes.jsx     # Gom tất cả các Route
+│   │   └── ProtectedRoute.jsx# Chặn người chưa đăng nhập hoặc không phải Admin vào trang quản trị
+│   │
+│   ├── utils/ (hoặc helpers/)# Hàm hỗ trợ dùng chung
+│   │   ├── formatCurrency.js # Hàm định dạng tiền tệ: 85000 -> "85.000 đ"
+│   │   └── formatDate.js     # Chuyển đổi chuỗi ngày tháng ISO sang dd/MM/yyyy
+│   │
+│   ├── App.jsx               # Bọc các Provider (AuthProvider, CartProvider)
+│   ├── index.css             # Chứa 3 dòng cấu hình Tailwind CSS (@tailwind base...)
+│   └── main.jsx              # Điểm khởi chạy React gắn vào index.html
+│
+├── .env                      # Biến môi trường chứa URL API của .NET (VITE_API_URL=...)
+├── package.json              # Khai báo các thư viện phụ thuộc (axios, react-router-dom...)
+├── tailwind.config.js        # File cấu hình style Tailwind CSS
+└── vite.config.js            # File cấu hình build của Vite

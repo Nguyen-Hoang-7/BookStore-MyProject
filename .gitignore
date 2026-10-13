@@ -1,0 +1,4 @@
+bookstore-client/node_modules
+bookstore-client/.env
+BookStoreApi/bin
+BookStoreApi/obj

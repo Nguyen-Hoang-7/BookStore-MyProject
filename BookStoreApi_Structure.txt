@@ -1,0 +1,56 @@
+BookStoreApi/
+├── Controllers/              # Tiếp nhận HTTP Request, gọi Service và trả về Response
+│   ├── AuthController.cs     # Đăng ký, đăng nhập, cấp token
+│   ├── BooksController.cs    # Lấy danh sách sách, tìm kiếm, CRUD sách
+│   ├── CategoriesController.cs
+│   ├── OrdersController.cs   # Đặt hàng, xem lịch sử đơn hàng
+│   └── UsersController.cs    # Xem/sửa profile, đổi mật khẩu
+│
+├── Data/                     # Quản lý tương tác CSDL bằng EF Core
+│   ├── AppDbContext.cs       # Khai báo DbSet và cấu hình Fluent API
+│   └── DbInitializer.cs     # (Tùy chọn) Chứa code Seed dữ liệu mẫu ban đầu
+│
+├── Migrations/               # File do lệnh 'dotnet ef migrations add' tự động sinh ra
+│   └── ...                   # (Không sửa trực tiếp các file trong này)
+│
+├── Models/                   # Chứa các Entity đại diện cho các bảng trong SQL
+│   ├── Book.cs
+│   ├── Category.cs
+│   ├── User.cs
+│   ├── Order.cs
+│   └── OrderItem.cs
+│
+├── DTOs/                     # Data Transfer Objects (Dữ liệu nhận vào/trả ra qua API)
+│   ├── Auth/                 # DTO cho việc xác thực
+│   │   ├── RegisterDto.cs
+│   │   ├── LoginDto.cs
+│   │   └── AuthResponseDto.cs
+│   ├── Books/                # DTO cho sản phẩm sách
+│   │   ├── BookCreateDto.cs
+│   │   ├── BookUpdateDto.cs
+│   │   └── BookResponseDto.cs
+│   └── Orders/               # DTO cho giỏ hàng và đặt hàng
+│       ├── CreateOrderDto.cs
+│       └── OrderDetailDto.cs
+│
+├── Services/                 # Chứa Business Logic (tùy chọn nhưng nên có khi dự án lớn dần)
+│   ├── IAuthService.cs
+│   ├── AuthService.cs
+│   ├── IFileService.cs       # Xử lý lưu và xóa file ảnh sách/avatar
+│   └── FileService.cs
+│
+├── Helpers/ (hoặc Common/)   # Các hàm tiện ích dùng chung
+│   └── JwtHelper.cs          # Hàm sinh và giải mã token
+│
+├── wwwroot/                  # Chứa file tĩnh (ảnh sách, avatar tải lên) nếu lưu nội bộ
+│   └── uploads/
+│       ├── books/
+│       └── avatars/
+│
+├── appsettings.json          # Cấu hình chuỗi kết nối SQL, JWT Secret Key...
+├── appsettings.Development.json
+├── Program.cs                # File cấu hình dịch vụ (DI, CORS, Auth, DB) và pipeline
+└── BookStoreApi.csproj       # File định nghĩa các gói thư viện NuGet đã cài
+
+
+-- fk2N+2Gcu/ZRNMCL8qlcpY0XNzfpy/J9EHJVNT6qOE8i5fBcKbc6Thy2Kx7J4XSP
