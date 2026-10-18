@@ -2,7 +2,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import AdminLogin from "./pages/admin/AdminLogin";
-import AdminLayout from "./layouts/AdminLayout";
+import AdminLayout from "./layouts/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import AdminRoute from "./components/AdminRoute";

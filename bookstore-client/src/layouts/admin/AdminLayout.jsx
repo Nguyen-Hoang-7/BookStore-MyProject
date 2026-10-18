@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
-import AdminSidebar from "../components/admin/AdminSidebar";
-import AdminHeader from "../components/admin/AdminHeader";
+import AdminSidebar from "../../components/admin/AdminSidebar";
+import AdminHeader from "../../components/admin/AdminHeader";
 
 function AdminLayout() {
   const { user, logout } = useAuth();
@@ -35,7 +34,7 @@ function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
       {/* Sidebar */}
       <AdminSidebar
         collapsed={collapsed}
@@ -49,7 +48,7 @@ function AdminLayout() {
           type="button"
           aria-label="Đóng menu quản trị"
           onClick={closeMobileSidebar}
-          className="fixed inset-0 z-40 bg-slate-900/40 md:hidden"
+          className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs md:hidden dark:bg-slate-950/70"
         />
       )}
 

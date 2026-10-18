@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 
 import {
@@ -62,6 +61,7 @@ function AdminSidebar({
         flex h-dvh w-64 flex-col
         overflow-x-hidden overflow-y-auto
         border-r border-slate-200 bg-white
+        dark:border-slate-800 dark:bg-slate-900
         px-4 py-5
         transition-all duration-300
         ${collapsed ? "md:w-20" : "md:w-64"}
@@ -86,11 +86,11 @@ function AdminSidebar({
             collapsed ? "md:hidden" : ""
           }`}
         >
-          <span className="whitespace-nowrap text-lg font-bold text-slate-900">
+          <span className="whitespace-nowrap text-lg font-bold text-slate-900 dark:text-white">
             BookStore
           </span>
 
-          <span className="text-[10px] font-semibold tracking-[2px] text-slate-400">
+          <span className="text-[10px] font-semibold tracking-[2px] text-slate-400 dark:text-slate-500">
             ADMIN PANEL
           </span>
         </div>
@@ -100,7 +100,7 @@ function AdminSidebar({
       <div
         className={`
           mb-3 px-3 text-[11px] font-semibold
-          uppercase tracking-wider text-slate-400
+          uppercase tracking-wider text-slate-400 dark:text-slate-500
           ${collapsed ? "md:hidden" : ""}
         `}
       >
@@ -126,8 +126,8 @@ function AdminSidebar({
                   "text-sm font-medium transition-colors duration-200",
 
                   isActive
-                    ? "bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-100"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600",
+                    ? "bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-100 dark:bg-indigo-500/15 dark:text-indigo-300 dark:ring-indigo-500/30"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-slate-800/70 dark:hover:text-indigo-400",
 
                   collapsed
                     ? "md:justify-center md:px-2"
@@ -156,28 +156,29 @@ function AdminSidebar({
       {/* Footer */}
       <div
         className={`
-          mt-auto border-t border-slate-200
+          mt-auto border-t border-slate-200 dark:border-slate-800
           pt-5
           ${collapsed ? "md:hidden" : ""}
         `}
       >
-        <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
+        <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3 dark:bg-slate-800/60">
           <div
             className="
               flex h-9 w-9 shrink-0 items-center
               justify-center rounded-full bg-indigo-100
               text-sm font-bold text-indigo-700
+              dark:bg-indigo-500/20 dark:text-indigo-300
             "
           >
             B
           </div>
 
           <div className="min-w-0">
-            <p className="truncate text-xs font-semibold text-slate-800">
+            <p className="truncate text-xs font-semibold text-slate-800 dark:text-slate-200">
               BookStore Admin
             </p>
 
-            <p className="mt-1 text-[11px] text-slate-500">
+            <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
               Quản lý cửa hàng sách
             </p>
           </div>
