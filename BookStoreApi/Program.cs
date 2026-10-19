@@ -9,6 +9,7 @@ using BookStoreApi.Services.Auth;
 using BookStoreApi.Services.Users;
 using BookStoreApi.Services.Admin;
 using BookStoreApi.Services.Catalog;
+using BookStoreApi.Services.Upload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +88,15 @@ builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
+builder.Services.AddScoped<IUploadService, UploadService>();
+
+// Nâng giới hạn kích thước request để nhận nhiều file cùng lúc
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 60 * 1024 * 1024;
+    options.ValueCountLimit = 20;
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -102,6 +112,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();   // ← thêm dòng này, đặt trước UseCors
+
 
 // Kích hoạt CORS (bắt buộc đặt trước UseAuthentication và UseAuthorization)
 app.UseCors("AllowReactApp");
