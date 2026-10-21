@@ -77,4 +77,26 @@ public class UploadService : IUploadService
 
         return (new UploadResultDTO { Url = $"/uploads/{fileName}", FileName = fileName }, null);
     }
+
+    // Thêm vào cuối class UploadService
+    public void DeleteFiles(IEnumerable<string> relativeUrls)
+    {
+        var uploadsFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads");
+
+        foreach (var url in relativeUrls)
+        {
+            // Chỉ xóa những file nội bộ bắt đầu bằng "/uploads/", bỏ qua link ảnh ngoài (https://...)
+            if (string.IsNullOrWhiteSpace(url) || !url.StartsWith("/uploads/", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            // Lấy tên file an toàn (chống lỗi Path Traversal như "../../")
+            var fileName = Path.GetFileName(url);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+    }
 }

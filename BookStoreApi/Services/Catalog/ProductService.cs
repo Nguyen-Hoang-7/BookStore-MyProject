@@ -10,8 +10,13 @@ namespace BookStoreApi.Services.Catalog;
 public class ProductService : IProductService
 {
     private readonly AppDbContext _db;
+    private readonly IUploadService _uploadService;
 
-    public ProductService(AppDbContext db) => _db = db;
+    public ProductService(AppDbContext db, IUploadService uploadService)
+    {
+        _db = db;
+        _uploadService = uploadService;
+    }
 
     private IQueryable<Product> BaseQuery() =>
         _db.Products
@@ -19,9 +24,12 @@ public class ProductService : IProductService
             .Include(p => p.BookDetail!).ThenInclude(bd => bd!.Publisher)
             .Include(p => p.BookDetail!).ThenInclude(bd => bd!.Authors);
 
-    public async Task<ServiceResult<object>> SearchAsync(string? q, int? categoryId, int page, int pageSize)
+    public async Task<ServiceResult<object>> SearchAsync(string? q, int? categoryId, int page, int pageSize, bool includeInactive = false)
     {
-        var query = BaseQuery().AsNoTracking().Where(p => p.IsActive);
+        var query = BaseQuery().AsNoTracking();
+
+        if (!includeInactive)
+            query = query.Where(p => p.IsActive);
 
         if (!string.IsNullOrWhiteSpace(q))
             query = query.Where(p => p.Name.Contains(q));
@@ -94,6 +102,7 @@ public class ProductService : IProductService
     {
         var product = await _db.Products
             .Include(p => p.BookDetail)
+            .ThenInclude(bd => bd.Authors) // Bắt buộc Include để EF track bảng trung gian
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (product is null)
@@ -131,8 +140,27 @@ public class ProductService : IProductService
                 _db.BookDetails.Remove(product.BookDetail);
         }
 
+        // Lọc ra danh sách ảnh cũ bị loại bỏ khỏi danh sách ảnh mới
+        var removedImages = product.ImageUrls
+            .Except(dto.ImageUrls ?? new List<string>(), StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        // Gán danh sách ảnh mới như bình thường
+        product.ImageUrls = dto.ImageUrls ?? new List<string>();
+        // ... (cập nhật các trường khác và BookDetail)
+
         await _db.SaveChangesAsync();
+
+        // Chỉ xóa file vật lý SAU KHI đã lưu Database thành công!
+        if (removedImages.Count > 0)
+        {
+            _uploadService.DeleteFiles(removedImages);
+        }
+
         return await GetByIdAsync(product.Id);
+
+        // await _db.SaveChangesAsync();
+        // return await GetByIdAsync(product.Id);
     }
 
     public async Task<ServiceResult<bool>> DeleteAsync(int id)
@@ -142,6 +170,10 @@ public class ProductService : IProductService
             return ServiceResult<bool>.Fail("Không tìm thấy sản phẩm.", ServiceErrorType.NotFound);
 
         _db.Products.Remove(product);   // BookDetail tự xóa theo nhờ Cascade
+
+        // Xóa toàn bộ ảnh vật lý của sách sau khi xóa khỏi DB
+        _uploadService.DeleteFiles(imagesToDelete);
+
         await _db.SaveChangesAsync();
         return ServiceResult<bool>.Ok(true);
     }
@@ -176,6 +208,10 @@ public class ProductService : IProductService
                 return ServiceResult<BookDetail>.Fail("Có tác giả không tồn tại trong hệ thống.", ServiceErrorType.NotFound);
 
             bookDetail.Authors = authors;
+        }
+        else
+        {
+            bookDetail.Authors.Clear(); // Xóa toàn bộ tác giả nếu truyền mảng rỗng
         }
 
         return ServiceResult<BookDetail>.Ok(bookDetail);

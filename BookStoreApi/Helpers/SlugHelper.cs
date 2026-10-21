@@ -10,7 +10,7 @@ public static class SlugHelper
     {
         if (string.IsNullOrWhiteSpace(title)) return string.Empty;
 
-        var normalizedString = title.Trim().ToLowerInvariant().Normalize(NormalizationForm.FormD);
+        var normalizedString = title.Trim().ToLowerInvariant().Replace("đ", "d").Normalize(NormalizationForm.FormD);
         var stringBuilder = new StringBuilder();
 
         foreach (var c in normalizedString)

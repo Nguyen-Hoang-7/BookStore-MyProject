@@ -8,4 +8,5 @@ public interface IUploadService
 {
     ServiceResult<UploadResultDTO> SaveImage(IFormFile file);
     UploadMultipleResultDTO SaveImages(List<IFormFile> files);
+    void DeleteFiles(IEnumerable<string> relativeUrls); // <-- Thêm dòng này
 }
