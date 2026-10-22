@@ -72,7 +72,8 @@ public class UploadService : IUploadService
 
         using (var stream = new FileStream(filePath, FileMode.Create))
         {
-            file.CopyTo(stream);
+            // và đổi method signature thành async
+            await file.CopyToAsync(stream);
         }
 
         return (new UploadResultDTO { Url = $"/uploads/{fileName}", FileName = fileName }, null);

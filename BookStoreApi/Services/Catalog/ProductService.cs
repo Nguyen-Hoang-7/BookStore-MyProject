@@ -169,6 +169,8 @@ public class ProductService : IProductService
         if (product is null)
             return ServiceResult<bool>.Fail("Không tìm thấy sản phẩm.", ServiceErrorType.NotFound);
 
+        var imagesToDelete = product.ImageUrls.ToList();
+
         _db.Products.Remove(product);   // BookDetail tự xóa theo nhờ Cascade
 
         // Xóa toàn bộ ảnh vật lý của sách sau khi xóa khỏi DB
