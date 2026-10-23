@@ -20,7 +20,9 @@ public class ProductsController : BaseApiController
         [FromQuery] int pageSize = 12)
     {
         var result = await _productService.SearchAsync(q, categoryId, page, pageSize);
-        return Ok(result.Data);
+        return result.Success
+        ? Ok(result.Data)
+        : ToErrorResponse(result);
     }
 
     [HttpGet("{id:int}")]

@@ -16,7 +16,7 @@ public class AuthorsController : BaseApiController
     public async Task<IActionResult> GetAll([FromQuery] string? q)
     {
         var result = await _authorService.GetAllAsync(q);
-        return Ok(result.Data);
+        return result.Success ? Ok(result.Data) : ToErrorResponse(result);
     }
 
     [HttpGet("{id:int}")]

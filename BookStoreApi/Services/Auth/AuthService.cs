@@ -3,6 +3,8 @@ using BookStoreApi.Data;
 using BookStoreApi.DTOs.Auth;
 using BookStoreApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStoreApi.Services.Auth;
 
@@ -34,7 +36,22 @@ public class AuthService : IAuthService
         };
 
         _db.Users.Add(user);
-        await _db.SaveChangesAsync();
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.GetBaseException() is SqlException sqlEx
+                && (sqlEx.Number == 2601 || sqlEx.Number == 2627))
+        {
+            // 2601: Trùng unique index
+            // 2627: Vi phạm UNIQUE constraint hoặc PRIMARY KEY
+            return ServiceResult<AuthResponseDTO>.Fail(
+                "Email đã được sử dụng.",
+                ServiceErrorType.Conflict
+            );
+        }
 
         return ServiceResult<AuthResponseDTO>.Ok(_tokenService.CreateToken(user));
     }

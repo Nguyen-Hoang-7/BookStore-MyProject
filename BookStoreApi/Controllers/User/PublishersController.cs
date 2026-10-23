@@ -16,7 +16,7 @@ public class PublishersController : BaseApiController
     public async Task<IActionResult> GetAll()
     {
         var result = await _publisherService.GetAllAsync();
-        return Ok(result.Data);
+        return result.Success ? Ok(result.Data) : ToErrorResponse(result);
     }
 
     [HttpGet("{id:int}")]

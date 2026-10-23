@@ -21,7 +21,7 @@ public class AdminUsersController : BaseApiController
     public async Task<IActionResult> GetAll(string? q, int page = 1, int pageSize = 20)
     {
         var result = await _adminUserService.GetAllAsync(q, page, pageSize);
-        return Ok(result.Data);
+        return result.Success ? Ok(result.Data) : ToErrorResponse(result);
     }
 
     [HttpPut("{id:int}/lock")]

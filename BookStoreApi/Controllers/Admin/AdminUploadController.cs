@@ -18,6 +18,15 @@ public class AdminUploadController : BaseApiController
     public IActionResult UploadImage(IFormFile file)
     {
         var result = _uploadService.SaveImage(file);
+        if (result.Errors.Count > 0)
+        {
+            return BadRequest(new
+            {
+                message = "Một hoặc nhiều ảnh không thể tải lên.",
+                errors = result.Errors,
+                uploaded = result.Uploaded
+            });
+        }
         return result.Success ? Ok(result.Data) : ToErrorResponse(result);
     }
 
@@ -25,6 +34,6 @@ public class AdminUploadController : BaseApiController
     public IActionResult UploadImages(List<IFormFile> files)
     {
         var result = _uploadService.SaveImages(files);
-        return Ok(result);
+        return result.Success ? Ok(result.Data) : ToErrorResponse(result);
     }
 }

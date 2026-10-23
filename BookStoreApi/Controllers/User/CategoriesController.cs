@@ -17,7 +17,7 @@ public class CategoriesController : BaseApiController
     public async Task<IActionResult> GetAll([FromQuery] CategoryType? type)
     {
         var result = await _categoryService.GetAllAsync(type);
-        return Ok(result.Data);
+        return result.Success ? Ok(result.Data) : ToErrorResponse(result);
     }
 
     [HttpGet("{id:int}")]

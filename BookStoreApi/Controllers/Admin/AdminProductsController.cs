@@ -14,12 +14,12 @@ public class AdminProductsController : BaseApiController
     private readonly IProductService _productService;
 
     public AdminProductsController(IProductService productService) => _productService = productService;
-    
+
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] string? q, [FromQuery] int? categoryId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var result = await _productService.SearchAsync(q, categoryId, page, pageSize, includeInactive: true);
-        return Ok(result.Data);
+        return result.Success ? Ok(result.Data) : ToErrorResponse(result);
     }
 
     [HttpPost]
